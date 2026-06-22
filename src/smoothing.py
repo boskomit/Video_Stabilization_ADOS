@@ -1,4 +1,6 @@
 import numpy as np
+from scipy.ndimage import gaussian_filter1d
+
 
 def moving_average(curve, radius):
 
@@ -17,8 +19,17 @@ def moving_average(curve, radius):
 def smooth_trajectory(trajectory, radius=30):
 
     smoothed_trajectory = np.copy(trajectory)
-    # Filter the x, y and angle curves
+
     for i in range(3):
         smoothed_trajectory[:,i] = moving_average(trajectory[:,i], radius=radius)
+
+    return smoothed_trajectory
+
+def smooth_trajectory_with_gaussian(trajectory, sigma=15):
+
+    smoothed_trajectory = np.copy(trajectory)
+    
+    for i in range(3):
+        smoothed_trajectory[:,i] = gaussian_filter1d(trajectory[:,i], sigma=sigma)
 
     return smoothed_trajectory
